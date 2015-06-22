@@ -359,6 +359,25 @@ class PypStr(str,PypStrCustom):
             return PypStr(match.group(0))
         else:
             return ''
+
+    def relist(self,to_match):
+        '''
+        returns list of matching groups, or string if only one matching group.
+        @return: list of matching groups, or string if only one matching group
+        @rtype: PypStr or PypList
+        @param to_match: regex used for matching
+        @type to_match: str
+        '''
+
+        match = re.search(to_match,self)
+        if match:
+            if len(match.groups()) > 1:
+                my_groups = list(match.groups())
+                return [PypStr(x) for x in my_groups]
+            else:
+                return PypStr(match.group(0))
+        else:
+            return ''
     
     
 class PypList(list,PypListCustom):
@@ -373,6 +392,7 @@ class PypList(list,PypListCustom):
             PypListCustom.__init__(self)
         except AttributeError:
             pass
+
 class Pyp(object):
     '''
     pyp engine. manipulates input stream using python methods
@@ -448,6 +468,7 @@ class Pyp(object):
         open_single = False
         open_double = False
         open_parenth = 0
+        open_regex = False
         escape = False
         letters = list(cmds)
         while letters:
@@ -465,6 +486,13 @@ class Pyp(object):
                     open_double = not open_double
                 else:
                     open_double = True
+
+            #COUNTS REGEX SLASHES
+            if letter == "/" and not open_single and not open_double:
+                if open_regex and not escape:
+                    open_regex = not open_regex
+                else:
+                    open_regex = True
             
             #COUNTS REAL PARANTHESES
             if not open_single and not open_double:
@@ -478,8 +506,15 @@ class Pyp(object):
                 cmd = cmd.strip()
                 letters = list('|'.join(macros[cmd]['command']) + letter + ''.join(letters))
                 cmd = ''
-            elif letter == '|' and not open_single and not open_double and not open_parenth:#
+            elif letter == '|' and not open_single and not open_double and not open_parenth and not open_regex:#
                 cmd_array.append(cmd)
+                cmd = ''
+            elif letter == '/' and open_regex:
+                cmd_array.append(cmd)
+                cmd = ''
+            elif letter == '/' and not open_regex:
+                # Add regex to cmd array
+                cmd_array.append("p.relist('{}')".format(cmd))
                 cmd = ''
             else:
                 cmd = cmd + letter
