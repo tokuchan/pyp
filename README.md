@@ -1,7 +1,7 @@
 e-pyp
 =====
 
-Welcome to *e-pyp*, an /extended/ or /experimental/ `pyp`. The original, from
+Welcome to *e-pyp*, an *extended* or *experimental* `pyp`. The original, from
 which this project is forked, can be found here: code.google.com/p/pyp. I do
 not mean, in any way, to detract from it. This project merely offers a view of
 several possibilities.
@@ -27,7 +27,7 @@ What Features are Offered?
 What Features are Planned?
 ==========================
 
-*e-pyp* doesn't /yet/ offer these features, but they are in the works:
+*e-pyp* doesn't *yet* offer these features, but they are in the works:
 
 1. Every string is a format call in disguise. Since every pipe in `pyp` has an
    input, and sometimes those inputs are lists, it seems natural for naked
@@ -48,3 +48,9 @@ What Features are Planned?
    parsing. When you pipe from `options`, you will get a parsed dictionary
    with your options in it. For more details on the string's format, see
    the docopt project.
+
+Contributing to the Project
+===========================
+
+If you can, you should try to contribute to the original `pyp` project, but if
+you'd like to send me a pull request, please read the CONTRIBUTING file first.
